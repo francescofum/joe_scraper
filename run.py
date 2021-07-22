@@ -197,7 +197,7 @@ class BarchartScraper(ScraperBaseClass):
     
 
     def get_palm_oil_derivative(self):
-        logging.info("Fetching palm oil derivatives "
+        logging.info("Fetching palm oil derivatives ")
         self.driver.get(BarchartScraper.PALM_OIL_PATH)
         table = WebDriverWait(self.driver, 60).until(
                 EC.presence_of_element_located((By.XPATH, '/html/body/main/div/div[2]/div[2]/div/div[2]/div/div/div/div[3]/div/div[2]/div/div/ng-transclude/table'))
@@ -227,7 +227,7 @@ class BarchartScraper(ScraperBaseClass):
 
     
     def get_canola_futures(self):
-        logging.info("Fetching canola futures"
+        logging.info("Fetching canola futures")
         self.driver.get(BarchartScraper.CANOLA_PATH)
         canolaFuturesData = OrderedDict()
         table = WebDriverWait(self.driver, 60).until(
@@ -444,4 +444,4 @@ if __name__ == "__main__":
     rh.save_barchart(mw)
     rh.save_barchart(crn)
 
-    logger.info("Finshed runnign script, exiting.")
+    logger.info("Finshed running script, exiting.")
