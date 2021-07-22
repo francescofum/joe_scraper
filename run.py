@@ -61,7 +61,7 @@ logging.info("Chromedriver pass found")
 class ScraperBaseClass():
 
     def __init__(self):
-        logging.info("Starting CME Scraper")
+        logging.info("Starting Scraper")
         try:
             self.driver = webdriver.Chrome(ChromeDriverManager().install())
 
@@ -83,17 +83,19 @@ class CMEScraper(ScraperBaseClass):
         
 
     def get_crude_oil_futures(self):
+        # Old ids;
+        #cmeDelayedQuotes2_CLQ1_open
         self.driver.get(CMEScraper.CME_CRUDE_OIL_PATH)
         logging.info("Getting crude oil futures")
         data = OrderedDict()
         open_price = WebDriverWait(self.driver, 60).until(
-                EC.presence_of_element_located((By.ID, "cmeDelayedQuotes2_CLQ1_open"))
+                EC.presence_of_element_located((By.ID, "cmeDelayedQuotes2_CLU1_open"))
             ).text
         high_price = WebDriverWait(self.driver, 60).until(
-                EC.presence_of_element_located((By.ID, "cmeDelayedQuotes2_CLQ1_high"))
+                EC.presence_of_element_located((By.ID, "cmeDelayedQuotes2_CLU1_high"))
             ).text
         low_price = WebDriverWait(self.driver, 60).until(
-                EC.presence_of_element_located((By.ID, "cmeDelayedQuotes2_CLQ1_low"))
+                EC.presence_of_element_located((By.ID, "cmeDelayedQuotes2_CLU1_low"))
             ).text
       
         logging.info(f"OIL FUTURES PRICES: O:{open_price} H:{high_price} L:{low_price}")
@@ -142,6 +144,7 @@ class CMEScraper(ScraperBaseClass):
     def get_soybean_meal_futures(self):
         logging.info("Getting soybeans meal futures")
         data = OrderedDict()
+      
         self.driver.get(CMEScraper.CME_AGRI_PATH)
         open_price = WebDriverWait(self.driver, 60).until(
                 EC.presence_of_element_located((By.ID, "cmeDelayedQuotes2_ZMZ1_open"))
@@ -183,14 +186,18 @@ class BarchartScraper(ScraperBaseClass):
     SOYBEAN_PATH  = 'https://www.barchart.com/futures/quotes/ZS*0/futures-prices'
     CANOLA_PATH   = 'https://www.barchart.com/futures/quotes/RS*0/futures-prices'
     GRAINS_PATH   = 'https://www.barchart.com/futures/european/grains'
-
+    
+   
     def __init__(self):
+   
         super().__init__()
         # Get MYRUSD=x
         self.conversion = myr2usd()
+        #self.conversion = myr2usd()
     
 
     def get_palm_oil_derivative(self):
+        logging.info("Fetching palm oil derivatives "
         self.driver.get(BarchartScraper.PALM_OIL_PATH)
         table = WebDriverWait(self.driver, 60).until(
                 EC.presence_of_element_located((By.XPATH, '/html/body/main/div/div[2]/div[2]/div/div[2]/div/div/div/div[3]/div/div[2]/div/div/ng-transclude/table'))
@@ -220,6 +227,7 @@ class BarchartScraper(ScraperBaseClass):
 
     
     def get_canola_futures(self):
+        logging.info("Fetching canola futures"
         self.driver.get(BarchartScraper.CANOLA_PATH)
         canolaFuturesData = OrderedDict()
         table = WebDriverWait(self.driver, 60).until(
@@ -370,10 +378,10 @@ class resultsHandler():
 
 def myr2usd():
     date = datetime.today().strftime('%Y-%m-%d')
-    myrusd_raw = yf.download(tickers = 'MYRUSD=X',start=date)
-
-    myrusd = (myrusd_raw.loc[:,"Open"][0])
-    return myrusd
+    #myrusd_raw = yf.download(tickers = 'MYRUSD=X',start=date)
+    #myrusd = (myrusd_raw.loc[:,"Open"][0])
+    # return myrusd
+    return 1
 
 
 def yforex():
@@ -402,6 +410,7 @@ if __name__ == "__main__":
     sb = cme_scraper.get_soybean_futures()
     sm = cme_scraper.get_soybean_meal_futures()
     so = cme_scraper.get_soybean_oil_futures()
+    logging.info("Closing CME.")
     cme_scraper.driver.close()
 
     barchart_scraper = BarchartScraper()
@@ -434,3 +443,5 @@ if __name__ == "__main__":
     rh.save_barchart(ra)
     rh.save_barchart(mw)
     rh.save_barchart(crn)
+
+    logger.info("Finshed runnign script, exiting.")
