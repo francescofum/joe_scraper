@@ -29,9 +29,9 @@ from datetime import datetime
 
 CHROMEDRIVER_PATH  = "../tools/chromedriver"
 
-torexe = os.popen(r'/usr/sbin')
-PROXY = "socks5://localhost:9050" # IP:PORT or HOST:PORT
-chrome_options.add_argument(f'--proxy-server={PROXY}')
+#torexe = os.popen(r'/usr/sbin')
+#PROXY = "socks5://localhost:9050" # IP:PORT or HOST:PORT
+#chrome_options.add_argument(f'--proxy-server={PROXY}')
 
 # Setup logger
 logFormatter = logging.Formatter("%(asctime)s [%(threadName)-12.12s] [%(levelname)-5.5s]  %(message)s")
@@ -63,7 +63,8 @@ class ScraperBaseClass():
     def __init__(self):
         logging.info("Starting Scraper")
         try:
-            self.driver = webdriver.Chrome(ChromeDriverManager().install())
+            self.driver    = webdriver.Chrome(executable_path='chromedriver.exe')
+            #self.driver = webdriver.Chrome(ChromeDriverManager().install())
 
             # self.driver = webdriver.Chrome(CHROMEDRIVER_PATH,options=chrome_options)
         except Exception as e:
