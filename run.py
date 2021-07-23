@@ -403,7 +403,7 @@ def yforex():
 
 if __name__ == "__main__":
     date = datetime.today().strftime('%Y_%m_%d-%H_%M_%S')
-    FILEPATH = os.getcwd() + '_' + date + '.txt'
+    FILEPATH = os.getcwd() + '_' + date + '.csv'
 
     cme_scraper = CMEScraper()
     co = cme_scraper.get_crude_oil_futures()
