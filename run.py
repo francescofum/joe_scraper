@@ -360,7 +360,7 @@ class resultsHandler():
         h     = str(data[title]['high'])
         l     = str(data[title]['low'])
         with open(FILEPATH, 'a') as fh:
-            fh.write(f"{title} open: {o}  high: {h} low: {l} \n")
+            fh.write(f"{title},open,{o},high,{h},low,{l}\n")
 
     def save_barchart(self,data):
         title = data['month']
@@ -369,7 +369,7 @@ class resultsHandler():
         l     = str("{:.2f}".format(float(data['low']))) 
         with open(FILEPATH, 'a') as fh:
             try:
-                fh.write(f"{title} open: {o}  high: {h} low: {l} \n")
+                fh.write(f"{title},open,{o},high,{h},low,{l} \n")
             except Exception as e:
                 print(e)
 
